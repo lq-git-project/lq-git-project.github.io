@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>哈尔滨冰雪旅游套餐 | 雪乡+冰雪大世界</title>
+    <style>
+        /* 全局样式重置 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft Yahei", sans-serif;
+        }
+        
+        /* 主题色定义 */
+        :root {
+            --primary: #165DFF;
+            --primary-light: #E8F3FF;
+            --accent: #FFD166;
+            --text-main: #333333;
+            --text-secondary: #666666;
+            --white: #FFFFFF;
+            --bg-light: #F5F8FF;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --radius: 16px;
+            --radius-sm: 8px;
+        }
+        
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+        
+        /* 顶部导航栏 */
+        .header {
+            background: linear-gradient(135deg, var(--primary), #0F47C1);
+            color: var(--white);
+            padding: 20px 16px;
+            border-radius: 0 0 var(--radius) var(--radius);
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        /* 套餐标签导航 */
+        .tab-nav {
+            display: flex;
+            overflow-x: auto;
+            gap: 8px;
+            padding: 16px;
+            margin-bottom: 8px;
+            scrollbar-width: none;
+        }
+        
+        .tab-nav::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .tab-item {
+            flex: 0 0 auto;
+            padding: 8px 16px;
+            background-color: var(--white);
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .tab-item.active {
+            background-color: var(--primary);
+            color: var(--white);
+        }
+        
+        /* 套餐卡片容器 */
+        .package-container {
+            padding: 0 16px;
+            display: none;
+        }
+        
+        .package-container.active {
+            display: block;
+        }
+        
+        /* 通用套餐卡片样式 */
+        .package-card {
+            background-color: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            margin-bottom: 16px;
+            padding: 16px;
+        }
+        
+        /* 雪乡套餐标题+价格容器 */
+        .snowtown-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .package-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .price-tag {
+            background-color: var(--accent);
+            color: var(--text-main);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(255, 209, 102, 0.4);
+        }
+        
+        /* 套餐内容 */
+        .package-highlight {
+            background-color: var(--primary-light);
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+        
+        .package-highlight h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--primary);
+        }
+        
+        .package-highlight p {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* 项目列表样式 */
+        .items-section {
+            margin-bottom: 12px;
+        }
+        
+        .items-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .items-section h3::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .items-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .item-tag {
+            padding: 4px 10px;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border-radius: 12px;
+            font-size: 12px;
+        }
+        
+        /* 住宿/须知说明 */
+        .desc-section {
+            margin-bottom: 12px;
+        }
+        
+        .desc-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .desc-section h3::before {
+            content: "";
+            display: inline-block;
+            width: 4px;
+            height: 16px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .desc-section p {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+        
+        /* PDF按钮样式 */
+        .pdf-btn {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 10px 16px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            text-decoration: none;
+            transition: background-color 0.2s;
+        }
+        
+        .pdf-btn:hover {
+            background-color: #0F47C1;
+        }
+        
+        /* 折叠面板样式 */
+        .collapse-section {
+            margin-top: 12px;
+            border-top: 1px solid var(--primary-light);
+            padding-top: 12px;
+        }
+        
+        .collapse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        .collapse-icon {
+            font-size: 16px;
+            transition: transform 0.2s ease;
+        }
+        
+        .collapse-icon.rotate {
+            transform: rotate(180deg);
+        }
+        
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .collapse-content.show {
+            max-height: 500px;
+        }
+        
+        .collapse-content ul {
+            margin-top: 8px;
+            padding-left: 20px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        .collapse-content li {
+            margin-bottom: 4px;
+        }
+        
+        /* 冰雪大世界轮播样式 */
+        .ice-slider-container {
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+        
+        .ice-slider-wrapper {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 10px;
+        }
+        
+        .ice-slider-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .slider-img {
+            width: 100%;
+            max-width: 100vw;
+            height: 180px;
+            object-fit: cover;
+            scroll-snap-align: center;
+            border-radius: 8px;
+        }
+        
+        .ice-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .ice-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--white);
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .ice-dot.active {
+            opacity: 1;
+            width: 20px;
+            border-radius: 4px;
+            background: var(--accent);
+        }
+        
+        /* 底部咨询栏 */
+        .contact-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--white);
+            padding: 12px 16px;
+            box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
+            display: flex;
+            gap: 8px;
+        }
+        
+        .contact-btn {
+            flex: 1;
+            padding: 12px;
+            background-color: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .contact-btn.secondary {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        /* 适配横屏/大屏手机 */
+        @media (min-width: 480px) {
+            .slider-img {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <div class="header">
+        <h1>哈尔滨冰雪旅游精品套餐</h1>
+        <p>纯玩无购物 · 一价全含 · 专业服务</p>
+    </div>
+
+    <!-- 套餐标签导航 -->
+    <div class="tab-nav">
+        <div class="tab-item active" data-tab="snowtown">雪乡两日游</div>
+        <div class="tab-item" data-tab="iceworld">冰雪大世界套餐</div>
+    </div>
+
+    <!-- 雪乡套餐容器 -->
+    <div class="package-container active" id="snowtown">
+        <!-- 980元雪乡套餐 -->
+        <div class="package-card">
+            <div class="snowtown-header">
+                <h2 class="package-title">王者归来雪乡两日游</h2>
+                <div class="price-tag">¥980/人</div>
+            </div>
+            
+            <div class="package-highlight">
+                <h3>套餐核心特色</h3>
+                <p>2+1陆地头等舱（可躺可坐）· 东北民俗暖炕4人间 · 铁锅炖/杀猪菜/饺子宴 · 全程无购物</p>
+            </div>
+
+            <div class="items-section">
+                <h3>游玩项目</h3>
+                <div class="items-list">
+                    <span class="item-tag">中国雪乡</span>
+                    <span class="item-tag">狗熊岭打卡</span>
+                    <span class="item-tag">冰雪画廊</span>
+                    <span class="item-tag">雪地摩托</span>
+                    <span class="item-tag">马拉爬犁</span>
+                    <span class="item-tag">梦幻家园</span>
+                    <span class="item-tag">二人转</span>
+                    <span class="item-tag">冰雪欢乐谷</span>
+                    <span class="item-tag">土匪抢亲</span>
+                    <span class="item-tag">威虎寨</span>
+                    <span class="item-tag">牧雪山村</span>
+                    <span class="item-tag">森林观光车</span>
+                    <span class="item-tag">大秃顶子山</span>
+                </div>
+            </div>
+
+            <div class="desc-section">
+                <h3>住宿说明</h3>
+                <p>雪乡景区内民俗暖炕（4人间独立卫浴），拼住规则：男生与男生拼、女生与女生拼；全程不提供自然单间，炕差自理。</p>
+            </div>
+
+            <div class="collapse-section">
+                <div class="collapse-header" onclick="toggleCollapse(this)">
+                    <span>接待标准</span>
+                    <span class="collapse-icon">▼</span>
+                </div>
+                <div class="collapse-content">
+                    <ul>
+                        <li>用餐：1早3正餐（10人一桌，不足10人减量，不含酒水）</li>
+                        <li>交通：2+1陆地头等舱空调大巴，一人一正座</li>
+                        <li>门票：含雪乡首道大门票+倒站车，游玩项目为赠送（不退不换）</li>
+                        <li>导服：全程5星中文导游服务，自由活动期间无导游</li>
+                        <li>保险：含旅行社责任险，建议自行购买意外险</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/pdf/%E7%8E%8B%E8%80%85%E5%BD%92%E6%9D%A5%E9%9B%AA%E4%B9%A1%E4%B8%A4%E6%97%A5%E6%B8%B8980.pdf" class="pdf-btn" target="_blank">查看套餐详情PDF</a>
+        </div>
+
+        <!-- 1280元雪乡套餐 -->
+        <div class="package-card">
+            <div class="snowtown-header">
+                <h2 class="package-title">B太同款雪乡两日游（0自费漂流版）</h2>
+                <div class="price-tag">¥1280/人</div>
+            </div>
+            
+            <div class="package-highlight">
+                <h3>套餐核心特色</h3>
+                <p>含980套餐全部权益 · 2天雪服雪镜免费使用 · 梦幻魔界漂流 · 泼水成冰 · 真正0自费</p>
+            </div>
+
+            <div class="items-section">
+                <h3>游玩项目（含升级）</h3>
+                <div class="items-list">
+                    <span class="item-tag">中国雪乡</span>
+                    <span class="item-tag">狗熊岭打卡</span>
+                    <span class="item-tag">冰雪画廊</span>
+                    <span class="item-tag">雪地摩托</span>
+                    <span class="item-tag">马拉爬犁</span>
+                    <span class="item-tag">梦幻家园</span>
+                    <span class="item-tag">二人转</span>
+                    <span class="item-tag">魔界漂流</span>
+                    <span class="item-tag">泼水成冰</span>
+                    <span class="item-tag">冰雪欢乐谷</span>
+                    <span class="item-tag">土匪抢亲</span>
+                    <span class="item-tag">威虎寨</span>
+                    <span class="item-tag">牧雪山村</span>
+                    <span class="item-tag">森林观光车</span>
+                    <span class="item-tag">大秃顶子山</span>
+                </div>
+            </div>
+
+            <div class="desc-section">
+                <h3>住宿说明</h3>
+                <p>雪乡景区内民俗暖炕（4人间独立卫浴），拼住规则：男生与男生拼、女生与女生拼；可升级双人炕标，炕差自理。</p>
+            </div>
+
+            <div class="collapse-section">
+                <div class="collapse-header" onclick="toggleCollapse(this)">
+                    <span>费用不含说明</span>
+                    <span class="collapse-icon">▼</span>
+                </div>
+                <div class="collapse-content">
+                    <ul>
+                        <li>自由活动期间的交通费、餐费</li>
+                        <li>住宿单房差、加床费及酒店内个人消费</li>
+                        <li>旅游意外险、航空保险（建议购买）</li>
+                        <li>交通延误、不可抗力导致的额外费用</li>
+                        <li>儿童报价外的其他费用</li>
+                        <li>因游客自身原因产生的额外费用</li>
+                    </ul>
+                </div>
+            </div>
+
+            <a href="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/pdf/A3-B%E5%A4%AA%E5%90%8C%E6%AC%BE%E9%9B%AA%E4%B9%A1%E4%B8%A4%E6%97%A5%E6%B8%B8%EF%BC%880%E8%87%AA%E8%B4%B9%E6%BC%82%E6%B5%81%E7%89%88%EF%BC%89.pdf" class="pdf-btn" target="_blank">查看套餐详情PDF</a>
+        </div>
+    </div>
+
+    <!-- 冰雪大世界套餐容器 -->
+    <div class="package-container" id="iceworld">
+        <!-- 498元冰雪大世界套餐 -->
+        <div class="package-card">
+            <!-- 轮播图区域 -->
+            <div class="ice-slider-container">
+                <div class="ice-slider-wrapper" id="iceSlider">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D1.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D2.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D3.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D4.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D5.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D6.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                    <img src="https://oss-common-files.oss-cn-beijing.aliyuncs.com/%E5%86%B0%E9%9B%AA%E5%A4%A7%E4%B8%96%E7%95%8C/image/%E7%B4%A2%E8%8F%B2%E4%BA%9A%E6%95%99%E5%A0%82%E7%BE%8E%E6%8B%8D7.jpg" alt="索菲亚教堂美拍" class="slider-img">
+                </div>
+                <div class="ice-dots" id="iceDots">
+                    <div class="ice-dot active"></div>
+                    <div class="ice-dot"></div>
+                    <div class="ice-dot"></div>
+                    <div class="ice-dot"></div>
+                    <div class="ice-dot"></div>
+                    <div class="ice-dot"></div>
+                    <div class="ice-dot"></div>
+                </div>
+            </div>
+
+            <div class="snowtown-header">
+                <h2 class="package-title">冰雪大世界门票 + 索菲亚教堂美拍</h2>
+                <div class="price-tag">¥498/人</div>
+            </div>
+            
+            <div class="package-highlight">
+                <h3>套餐核心特色</h3>
+                <p>冰雪大世界成人门票 · 索菲亚教堂主题美拍 · 30张底片全送 · 3张精修照片 · 主题妆造</p>
+            </div>
+
+            <div class="items-section">
+                <h3>套餐包含</h3>
+                <div class="items-list">
+                    <span class="item-tag">冰雪大世界门票</span>
+                    <span class="item-tag">教堂美拍</span>
+                    <span class="item-tag">30张底片</span>
+                    <span class="item-tag">3张精修</span>
+                    <span class="item-tag">主题妆造</span>
+                    <span class="item-tag">服装造型</span>
+                    <span class="item-tag">配饰使用</span>
+                </div>
+            </div>
+
+            <div class="desc-section">
+                <h3>美拍说明</h3>
+                <p>美拍需至少提前1天预约，拍摄后48小时内交付精修照片（电子版）；服装为公用款，拍摄后统一消毒，放心使用。</p>
+            </div>
+
+            <div class="collapse-section">
+                <div class="collapse-header" onclick="toggleCollapse(this)">
+                    <span>预订须知</span>
+                    <span class="collapse-icon">▼</span>
+                </div>
+                <div class="collapse-content">
+                    <ul>
+                        <li>美拍预约后不可取消/改期，冰雪大世界门票有效期为游玩当日</li>
+                        <li>套餐仅限单人使用，不可拆分转让</li>
+                        <li>精修照片将通过微信发送，拍摄时请提供接收方式</li>
+                        <li>门票兑换需携带本人有效身份证件</li>
+                        <li>美拍服务时间：9:00-17:00（冬季营业时间）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部咨询栏 -->
+    <div class="contact-bar">
+        <a href="tel:13800138000" class="contact-btn">立即咨询</a>
+        <a href="javascript:void(0)" class="contact-btn secondary">在线预订</a>
+    </div>
+
+    <script>
+        // 标签切换逻辑
+        const tabItems = document.querySelectorAll('.tab-item');
+        const packageContainers = document.querySelectorAll('.package-container');
+
+        tabItems.forEach(tab => {
+            tab.addEventListener('click', () => {
+                tabItems.forEach(item => item.classList.remove('active'));
+                packageContainers.forEach(container => container.classList.remove('active'));
+                
+                tab.classList.add('active');
+                const targetTab = tab.getAttribute('data-tab');
+                document.getElementById(targetTab).classList.add('active');
+            });
+        });
+
+        // 折叠面板逻辑
+        function toggleCollapse(el) {
+            const content = el.nextElementSibling;
+            const icon = el.querySelector('.collapse-icon');
+            
+            content.classList.toggle('show');
+            icon.classList.toggle('rotate');
+        }
+
+        // 冰雪大世界轮播逻辑
+        const iceSlider = document.getElementById('iceSlider');
+        const iceDots = document.getElementById('iceDots').children;
+        const iceSlideItems = iceSlider.children;
+        let iceCurrentIndex = 0;
+
+        // 滑动时切换指示器
+        iceSlider.addEventListener('scroll', () => {
+            const slideWidth = iceSlideItems[0].offsetWidth;
+            iceCurrentIndex = Math.round(iceSlider.scrollLeft / slideWidth);
+            updateIceDots();
+        });
+
+        // 点击指示器切换
+        for (let i = 0; i < iceDots.length; i++) {
+            iceDots[i].addEventListener('click', () => {
+                iceCurrentIndex = i;
+                iceSlider.scrollTo({
+                    left: iceSlideItems[0].offsetWidth * i,
+                    behavior: 'smooth'
+                });
+                updateIceDots();
+            });
+        }
+
+        // 更新指示器状态
+        function updateIceDots() {
+            for (let i = 0; i < iceDots.length; i++) {
+                iceDots[i].classList.remove('active');
+            }
+            iceDots[iceCurrentIndex].classList.add('active');
+        }
+
+        // 自动轮播
+        setInterval(() => {
+            iceCurrentIndex = (iceCurrentIndex + 1) % iceSlideItems.length;
+            iceSlider.scrollTo({
+                left: iceSlideItems[0].offsetWidth * iceCurrentIndex,
+                behavior: 'smooth'
+            });
+            updateIceDots();
+        }, 3000);
+    </script>
+</body>
+</html>
